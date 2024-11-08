@@ -1,6 +1,11 @@
 # docker build . -t flask-api
 FROM python:3.6-slim
 
+RUN addgroup --system <group>
+RUN adduser --system <user> --ingroup <group>
+USER <user>:<group>
+
+
 RUN apt-get clean \
     && apt-get -y update
 
