@@ -1,0 +1,29 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flaskapi-deployment
+  labels:
+    app: flaskapi
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: flaskapi
+  template:
+    metadata:
+      annotations:
+        vault.hashicorp.com/agent-inject: "true"
+        vault.hashicorp.com/role: "app"
+        vault.hashicorp.com/agent-pre-populate-only: "true"
+        vault.hashicorp.com/agent-inject-secret-database-config.txt: "internal/data/database/config"
+      labels:
+        app: flaskapi
+    spec:
+      serviceAccountName: app
+      containers:
+        - name: flaskapi
+          image: flask-api
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 5000

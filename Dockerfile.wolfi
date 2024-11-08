@@ -1,0 +1,17 @@
+# docker build -f Dockerfile.wolfi -t flask-api:latest .
+
+# Base image
+FROM wolfi-python:latest-amd64
+
+# Specify /bin/bash as the default shell
+SHELL ["/bin/bash", "-c"]
+
+WORKDIR /app
+
+COPY requirements.txt /app/requirements.txt
+RUN python3 -m venv ./.venv && source ./.venv/bin/activate && pip3 install --upgrade pip && pip install -r requirements.txt
+
+COPY . .
+
+EXPOSE 5000
+CMD [ "flaskapi.py" ]
